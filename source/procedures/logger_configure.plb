@@ -6,6 +6,7 @@ is
 
   l_apex varchar2(50) := 'FALSE';
   tbl_not_exist exception;
+  has_errors exception;
   pls_pkg_not_exist exception;
 
   l_text_data_length user_tab_columns.data_length%type;
@@ -18,6 +19,7 @@ is
   l_utl_lms varchar2(5) := 'FALSE';
 
   pragma exception_init(tbl_not_exist, -942);
+  pragma exception_init(has_errors, -4063);
   pragma exception_init(pls_pkg_not_exist, -06550);
 
 	l_version constant number  := dbms_db_version.version + (dbms_db_version.release / 10);
@@ -68,6 +70,8 @@ begin
     l_apex := 'TRUE';
   exception
     when tbl_not_exist then
+      l_apex := 'FALSE';
+    when has_errors then
       l_apex := 'FALSE';
     when no_data_found then
       l_apex := 'TRUE';
